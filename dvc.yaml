@@ -1,0 +1,50 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+      - src/prepare.py
+    params:
+      - prepare.seed
+    outs:
+      - data/raw
+      - data/prepared
+
+  augment:
+    cmd: python src/augment.py
+    deps:
+      - src/augment.py
+      - data/prepared
+    params:
+      - augment.seed
+      - augment.n_augment
+      - augment.rotation
+      - augment.shift
+      - augment.zoom
+    outs:
+      - data/augmented
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - data/prepared
+      - data/augmented
+    params:
+      - train.model
+      - train.use_augmented
+      - train.seed
+      - train.logreg.max_iter
+      - train.rf.n_estimators
+      - train.mlp.hidden_layer_sizes
+      - train.mlp.max_iter
+    outs:
+      - models/model.pkl
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/model.pkl
+      - data/prepared
+    metrics:
+      - eval/metrics.json

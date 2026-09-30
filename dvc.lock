@@ -1,0 +1,102 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: src/prepare.py
+      hash: md5
+      md5: c174798d1fd4aebaaee2988836d4933a
+      size: 933
+    params:
+      params.yaml:
+        prepare.seed: 42
+    outs:
+    - path: data/prepared
+      hash: md5
+      md5: 78090219ccab2fb2d11050634f02e8ce.dir
+      size: 45412149
+      nfiles: 2
+    - path: data/raw
+      hash: md5
+      md5: 18d3ba9f82aa57f2f5267753f1659e05.dir
+      size: 85828693
+      nfiles: 8
+  augment:
+    cmd: python src/augment.py
+    deps:
+    - path: data/prepared
+      hash: md5
+      md5: 78090219ccab2fb2d11050634f02e8ce.dir
+      size: 45412149
+      nfiles: 2
+    - path: src/augment.py
+      hash: md5
+      md5: 53ea157fb3a991a281e63b8e3f039fa9
+      size: 1521
+    params:
+      params.yaml:
+        augment.n_augment: 1
+        augment.rotation: 10
+        augment.seed: 42
+        augment.shift: 0.1
+        augment.zoom: 0.1
+    outs:
+    - path: data/augmented
+      hash: md5
+      md5: 63c34efc8e43752dd2af8ac406d41d29.dir
+      size: 51840016
+      nfiles: 1
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/augmented
+      hash: md5
+      md5: 63c34efc8e43752dd2af8ac406d41d29.dir
+      size: 51840016
+      nfiles: 1
+    - path: data/prepared
+      hash: md5
+      md5: 78090219ccab2fb2d11050634f02e8ce.dir
+      size: 45412149
+      nfiles: 2
+    - path: src/train.py
+      hash: md5
+      md5: cfdbb06f4d1f822112dfbdc19a147fe9
+      size: 1647
+    params:
+      params.yaml:
+        train.logreg.max_iter: 1000
+        train.mlp.hidden_layer_sizes:
+        - 128
+        - 64
+        train.mlp.max_iter: 50
+        train.model: logreg
+        train.rf.n_estimators: 100
+        train.seed: 42
+        train.use_augmented: false
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: c3a78cdc723cda962db8c08301db95bc
+      size: 32167
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/prepared
+      hash: md5
+      md5: 78090219ccab2fb2d11050634f02e8ce.dir
+      size: 45412149
+      nfiles: 2
+    - path: models/model.pkl
+      hash: md5
+      md5: c3a78cdc723cda962db8c08301db95bc
+      size: 32167
+    - path: src/evaluate.py
+      hash: md5
+      md5: 0186ed1010c2830b0315f8bb66e0a058
+      size: 929
+    outs:
+    - path: eval/metrics.json
+      hash: md5
+      md5: 2e336a7626052f4358a577c0baa1ac12
+      size: 1289

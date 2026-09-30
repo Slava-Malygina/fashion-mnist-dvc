@@ -1,0 +1,21 @@
+prepare:
+  seed: 42
+
+augment:
+  seed: 42
+  n_augment: 1
+  rotation: 10
+  shift: 0.1
+  zoom: 0.1
+
+train:
+  model: logreg
+  use_augmented: false
+  seed: 42
+  logreg:
+    max_iter: 1000
+  rf:
+    n_estimators: 100
+  mlp:
+    hidden_layer_sizes: [128, 64]
+    max_iter: 50
