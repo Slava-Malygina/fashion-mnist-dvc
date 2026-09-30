@@ -70,15 +70,15 @@ stages:
         - 128
         - 64
         train.mlp.max_iter: 50
-        train.model: mlp
+        train.model: logreg
         train.rf.n_estimators: 100
         train.seed: 42
-        train.use_augmented: false
+        train.use_augmented: true
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: d72c650a164eff9a2614ccbc4a12a964
-      size: 1758832
+      md5: bbf2e41672ab6fa53cfd43b64573909e
+      size: 32167
   evaluate:
     cmd: python src/evaluate.py
     deps:
@@ -89,8 +89,8 @@ stages:
       nfiles: 2
     - path: models/model.pkl
       hash: md5
-      md5: d72c650a164eff9a2614ccbc4a12a964
-      size: 1758832
+      md5: bbf2e41672ab6fa53cfd43b64573909e
+      size: 32167
     - path: src/evaluate.py
       hash: md5
       md5: 0186ed1010c2830b0315f8bb66e0a058
@@ -98,5 +98,5 @@ stages:
     outs:
     - path: eval/metrics.json
       hash: md5
-      md5: 9a45605fb259ac2d7e59f48f87c85972
-      size: 1278
+      md5: c54a084d09b90d794f8613057431ab62
+      size: 1291

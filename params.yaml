@@ -9,8 +9,8 @@ augment:
   zoom: 0.1
 
 train:
-  model: mlp
-  use_augmented: false
+  model: logreg
+  use_augmented: true
   seed: 42
   logreg:
     max_iter: 1000
