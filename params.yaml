@@ -9,7 +9,7 @@ augment:
   zoom: 0.1
 
 train:
-  model: rf
+  model: mlp
   use_augmented: true
   seed: 42
   logreg:
